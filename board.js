@@ -1,0 +1,147 @@
+class Board {
+  constructor(n) {
+    this.cells = this.generateBoard(n);
+    this.print();
+    this.queenCoords = [];
+  }
+
+  generateBoard(n) {
+    let board = [];
+    let boardRow;
+    for (let j = 0; j < n; j++) {
+      boardRow = [];
+      for (let i = 0; i < n; i++) {
+        let cell = new Cell([j, i]);
+        boardRow.push(cell);
+      }
+      board.push(boardRow);
+    }
+    return board;
+  }
+
+  print() {
+    let gridHtml ="";
+    for (let j = 0; j < this.cells.length; j++) {
+      let rowHtml = "<div class=\"row\">";
+      for (let i = 0; i < this.cells.length; i++) {
+        let cell = this.cells[j][i];
+        rowHtml += cell.div();
+      }
+      rowHtml += "</div>";
+      gridHtml += rowHtml;
+    }
+    document.querySelector('.grid').innerHTML = gridHtml;
+  }
+
+  placeQueen(cell) {
+    cell.element().innerHTML = "<p>Q</p>";
+    this.markDiag(cell);
+    this.markCell(cell);
+    this.markCol(cell);
+    this.markRow(cell);
+    let [row, col] = cell.cellCoordsInt();
+    this.queenCoords = this.queenCoords.concat([[row, col]]);
+  }
+
+  markCell(cell) {
+    if (!cell.element().className.includes("selected")) {
+      cell.element().className += " selected";
+      cell.className += " selected";
+    }
+  }
+
+  markCol(cell) {
+    let [row, col] = cell.cellCoordsInt();
+    for (let i = 0; i < this.cells.length; i++) {
+      let thisCell = this.cells[i][col];
+      this.markCell(thisCell);
+    }
+  }
+
+  markRow(cell) {
+    let [row, col] = cell.cellCoordsInt();
+    for (let i = 0; i < this.cells.length; i++) {
+      let thisCell = this.cells[row][i];
+      this.markCell(thisCell);
+    }
+  }
+
+  markDiag(cell) {
+    let [row, col] = cell.cellCoordsInt();
+    let i, j;
+    for (i = row, j = col; i >= 0 && j < this.cells.length; i--, j++) {
+      let thisCell = this.cells[i][j];
+      this.markCell(thisCell);
+    }
+    for (i = row, j = col; i < this.cells.length && j < this.cells.length; i++, j++) {
+      let thisCell = this.cells[i][j];
+      this.markCell(thisCell);
+    }
+  }
+
+  clear(cell) {
+    this.clearRow(cell);
+    this.clearCol(cell);
+    this.clearDiag(cell);
+  }
+
+  clearCell(cell) {
+    if (cell.className.includes("selected")) {
+      cell.className = cell.className.slice(0,(-"selected".length) - 1);
+      cell.element().className = cell.className;
+    }
+  }
+
+  clearRow(cell) {
+    let [row, col] = cell.cellCoordsInt();
+    for (let i = 0; i < this.cells.length; i++) {
+      let thisCell = this.cells[row][i];
+      this.clearCell(thisCell);
+    }
+  }
+
+  clearCol(cell) {
+    let [row, col] = cell.cellCoordsInt();
+    for (let i = 0; i < this.cells.length; i++) {
+      let thisCell = this.cells[i][col];
+      this.clearCell(thisCell);
+    }
+  }
+
+  clearDiag(cell) {
+    let [row, col] = cell.cellCoordsInt();
+    for (let i = row, j = col; i >= 0 && j < this.cells.length; i--, j++) {
+      let thisCell = this.cells[i][j];
+      this.clearCell(thisCell);
+    }
+    for (let i = row, j = col; i < this.cells.length && j < this.cells.length; i++, j++) {
+      let thisCell = this.cells[i][j];
+      this.clearCell(thisCell);
+    }
+  }
+
+  markAll(cell){
+    this.markRow(cell);
+    this.markCol(cell);
+    this.markDiag(cell);
+  }
+
+  removeQueen(cell) {
+    let [row, col] = cell.cellCoordsInt();
+    cell.element().innerHTML = "";
+    this.queenCoords = this.queenCoords.filter(coords => !this.sameVal(coords, [row, col]));
+    this.clear(cell);
+    this.queenCoords.map(coords => this.markAll(this.cells[coords[0]][coords[1]]));
+  }
+
+  sameVal(arr1, arr2) {
+    if (arr1.length !== arr2.length)
+      return false;
+    for (i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+  }
+}
+
+module.exports = Board;
