@@ -331,7 +331,8 @@ function setup() {
 
 setup();
 select.addEventListener("change", () => {
-    setup()
+  setup();
+  animate.removeAttribute("disabled");
 });
 
 let animate = document.querySelector('.animate');
