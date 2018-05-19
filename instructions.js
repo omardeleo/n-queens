@@ -4,22 +4,6 @@ class Instructions {
     this.instr = []
   }
 
-  // print() {
-  //   return this.instr;
-  // }
-  //
-  // solveNQ();
-  //
-  // function printSolution(board){
-  //   for (let i=0; i< this.n; i++){
-  //     let row = "";
-  //     for (let j=0; j< this.n; j++){
-  //       row = row + " " +board[i][j]+ " ";
-  //     }
-  //     console.log(row);
-  //   }
-  // }
-  //
   isSafe(board, row, col){
 
     // Checks the ← direction
@@ -45,25 +29,25 @@ class Instructions {
 
     return true;
   }
-  //
-  //
+
   recurseNQ(board, col){
     if (col >= this.n){
       return true;
     }
 
     for (let i = 0; i < this.n; i++){
-      this.instr.push(["evaluate", [i, col]])
+      this.instr.push(["evaluate", [i, col]]);
       if (this.isSafe(board, i, col)){
         board[i][col] = 1;
+        this.instr.push(["place", [i, col]]);
         if (this.recurseNQ(board, col + 1)===true)
           return true;
-        board[i][col]=0;
+        board[i][col] = 0;
+        this.instr.push(["remove", [i, col]]);
       }
     }
     return false;
   }
-
 
   solveNQ(){
     let board = this.generateBoard(this.n);
@@ -83,7 +67,6 @@ class Instructions {
     }
     return board;
   }
-
 }
 
 module.exports = Instructions;

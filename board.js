@@ -1,8 +1,12 @@
+let Cell = require('./cell.js');
+
 class Board {
   constructor(n) {
     this.cells = this.generateBoard(n);
     this.print();
     this.queenCoords = [];
+    this.n = n;
+    this.colorize();
   }
 
   generateBoard(n) {
@@ -17,6 +21,28 @@ class Board {
       board.push(boardRow);
     }
     return board;
+  }
+
+  colorize() {
+    let row;
+    for (let i = 0; i < this.n; i++) {
+      row = this.cells[i];
+      if (i % 2 === 0) {
+        row.map(cell => {
+          if (cell.col % 2 !== 0) {
+            cell.element().className += " black";
+            cell.className += " black";
+          };
+        });
+      } else {
+        row.map(cell => {
+          if (cell.col % 2 === 0) {
+            cell.element().className += " black";
+            cell.className += " black";
+          };
+        });
+      }
+    }
   }
 
   print() {
@@ -137,7 +163,7 @@ class Board {
   sameVal(arr1, arr2) {
     if (arr1.length !== arr2.length)
       return false;
-    for (i = 0; i < arr1.length; i++) {
+    for (let i = 0; i < arr1.length; i++) {
       if (arr1[i] !== arr2[i]) return false;
     }
     return true;
