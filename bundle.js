@@ -286,13 +286,6 @@ module.exports = Instructions;
 },{}],4:[function(require,module,exports){
 let Instructions = require('./instructions.js');
 let Board = require('./board.js');
-let instructions = new Instructions(8);
-instructions.solveNQ();
-let dir = instructions.instr;
-
-let board = new Board(8);
-
-let actions = dir.filter(x => x[0] !== "evaluate");
 
 function execute(board, coords, action){
   let [row, col] = coords;
@@ -304,19 +297,55 @@ function execute(board, coords, action){
   }
 }
 
+
+let board;
+let numSquares;
+let instructions;
+let dir;
+let actions;
+let select = document.querySelector('.num-squares');
+let evalInterval;
 function solve() {
+  // animate.removeEventListener("click");
   let i = 0;
-  let evalInterval = setInterval(() => {
+  evalInterval = setInterval(() => {
       if (i < actions.length) {
         let [action, coords] = [actions[i][0], actions[i][1]];
         execute(board, coords, action);
         i += 1;
   } else {
+      animate.removeAttribute("disabled");
       clearInterval(evalInterval);
     }
   }, 200);
+
+}
+function setup() {
+  numSquares = select.value;
+  instructions = new Instructions(numSquares);
+  instructions.solveNQ();
+  dir = instructions.instr;
+  actions = dir.filter(x => x[0] !== "evaluate");
+  board = new Board(numSquares);
 }
 
-solve();
+
+setup();
+select.addEventListener("change", () => {
+    setup()
+});
+
+let animate = document.querySelector('.animate');
+animate.addEventListener("click", () => {
+  animate.setAttribute("disabled", "disabled");
+  solve();
+});
+let reset = document.querySelector('.reset');
+
+reset.addEventListener("click", () => {
+  clearInterval(evalInterval);
+  board = new Board(numSquares);
+  animate.removeAttribute("disabled");
+});
 
 },{"./board.js":1,"./instructions.js":3}]},{},[4]);
