@@ -28,7 +28,6 @@ function solve() {
         execute(board, coords, action);
         i += 1;
   } else {
-      animate.removeAttribute("disabled");
       clearInterval(evalInterval);
     }
   }, 200);
