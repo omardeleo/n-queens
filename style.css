@@ -4,11 +4,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: url('queens_bg.jpg') no-repeat;
+  background-size: cover;
 }
 
 .main {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .grid {
   border: 4px solid gray;
