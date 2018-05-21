@@ -40,6 +40,7 @@ function setup() {
   dir = instructions.instr;
   actions = dir.filter(x => x[0] !== "evaluate");
   board = new Board(numSquares);
+  board.cells.forEach(row => row.map(cell => cell.test()));
 }
 
 
