@@ -11,7 +11,6 @@ function execute(board, coords, action){
   }
 }
 
-
 let board;
 let numSquares;
 let instructions;
@@ -19,8 +18,8 @@ let dir;
 let actions;
 let select = document.querySelector('.num-squares');
 let evalInterval;
+
 function solve() {
-  // animate.removeEventListener("click");
   let i = 0;
   evalInterval = setInterval(() => {
       if (i < actions.length) {
@@ -31,8 +30,8 @@ function solve() {
       clearInterval(evalInterval);
     }
   }, 200);
-
 }
+
 function setup() {
   numSquares = select.value;
   instructions = new Instructions(numSquares);
@@ -40,9 +39,8 @@ function setup() {
   dir = instructions.instr;
   actions = dir.filter(x => x[0] !== "evaluate");
   board = new Board(numSquares);
-  board.cells.forEach(row => row.map(cell => cell.test()));
+  board.addListeners();
 }
-
 
 setup();
 select.addEventListener("change", () => {
