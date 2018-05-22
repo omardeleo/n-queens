@@ -6,6 +6,8 @@ class Cell {
     this.queenCoords = [];
     this.className = `square cell-${this.row}-${this.col}`;
     this.cellClass = `cell-${this.row}-${this.col}`
+    this.mouseOver = this.mouseOver.bind(this);
+    this.mouseOut = this.mouseOut.bind(this);
   }
 
   div() {
@@ -46,8 +48,15 @@ class Cell {
   }
 
   addListeners() {
-    this.element().addEventListener("mouseover", () => this.mouseOver());
-    this.element().addEventListener("mouseout", () => this.mouseOut());
+    this.element().addEventListener("mouseover", this.mouseOver);
+    this.element().addEventListener("mouseout", this.mouseOut);
+  }
+
+
+  removeListeners() {
+    console.log("remove")
+    this.element().removeEventListener("mouseover", this.mouseOver);
+    this.element().removeEventListener("mouseout", this.mouseOut);
   }
 
   green() {
