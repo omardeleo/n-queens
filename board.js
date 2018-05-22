@@ -7,6 +7,7 @@ class Board {
     this.queenCoords = [];
     this.n = n;
     this.colorize();
+    this.queens = 0;
   }
 
   generateBoard(n) {
@@ -67,6 +68,10 @@ class Board {
     this.markRow(cell);
     let [row, col] = cell.cellCoordsInt();
     this.queenCoords = this.queenCoords.concat([[row, col]]);
+    this.queens += 1;
+    if (this.queens === parseInt(this.n)) {
+      this.victory();
+    }
   }
 
   markCell(cell) {
@@ -95,14 +100,27 @@ class Board {
   markDiag(cell) {
     let [row, col] = cell.cellCoordsInt();
     let i, j;
+
     for (i = row, j = col; i >= 0 && j < this.cells.length; i--, j++) {
       let thisCell = this.cells[i][j];
       this.markCell(thisCell);
     }
+
     for (i = row, j = col; i < this.cells.length && j < this.cells.length; i++, j++) {
       let thisCell = this.cells[i][j];
       this.markCell(thisCell);
     }
+
+    for (i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+      let thisCell = this.cells[i][j];
+      this.markCell(thisCell);
+    }
+
+    for (i = row, j = col; i < this.cells.length && j >= 0; i++, j--) {
+      let thisCell = this.cells[i][j];
+      this.markCell(thisCell);
+    }
+
   }
 
   clear(cell) {
@@ -144,6 +162,14 @@ class Board {
       let thisCell = this.cells[i][j];
       this.clearCell(thisCell);
     }
+    for (let i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+      let thisCell = this.cells[i][j];
+      this.clearCell(thisCell);
+    }
+    for (let i = row, j = col; i < this.cells.length && j >= 0; i++, j--) {
+      let thisCell = this.cells[i][j];
+      this.clearCell(thisCell);
+    }
   }
 
   markAll(cell){
@@ -154,10 +180,11 @@ class Board {
 
   removeQueen(cell) {
     let [row, col] = cell.cellCoordsInt();
-    cell.element().innerHTML = "";
+    cell.element().innerHTML = "<p></p>";
     this.queenCoords = this.queenCoords.filter(coords => !this.sameVal(coords, [row, col]));
     this.clear(cell);
     this.queenCoords.map(coords => this.markAll(this.cells[coords[0]][coords[1]]));
+    this.queens -= 1;
   }
 
   sameVal(arr1, arr2) {
@@ -167,6 +194,29 @@ class Board {
       if (arr1[i] !== arr2[i]) return false;
     }
     return true;
+  }
+
+  queenAction(cell) {
+    if (cell.isSafe()) {
+      this.placeQueen(cell);
+    } else {
+      if (cell.hasQueen()) {
+        this.removeQueen(cell);
+      }
+    }
+  }
+
+  clickFunction(cell) {
+    cell.element().addEventListener("click", () => this.queenAction(cell))
+  }
+
+  addListeners() {
+    this.cells.forEach(row => row.map(cell => cell.addListeners()));
+    this.cells.forEach(row => row.map(cell => this.clickFunction(cell)));
+  }
+
+  victory() {
+    console.log("YOU WIN!");
   }
 }
 
