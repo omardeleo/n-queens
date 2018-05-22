@@ -281,7 +281,6 @@ class Cell {
 
 
   removeListeners() {
-    console.log("remove")
     this.element().removeEventListener("mouseover", this.mouseOver);
     this.element().removeEventListener("mouseout", this.mouseOut);
   }
