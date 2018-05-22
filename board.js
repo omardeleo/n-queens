@@ -216,7 +216,6 @@ class Board {
   }
 
   victory() {
-    console.log("YOU WIN!");
     this.cells.forEach(row => row.map(cell => cell.removeListeners()));
     this.cells.forEach(row => row.map(cell => cell.green()));
   }
