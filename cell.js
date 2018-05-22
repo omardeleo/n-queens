@@ -9,13 +9,14 @@ class Cell {
   }
 
   div() {
-    return `<div class="square cell-${this.row}-${this.col}">
+    return `<div class="square">
+              <div class="cell-${this.row}-${this.col}"><p></p></div>
               <div class="overlay"></div>
             </div>`;
   }
 
   element() {
-    return document.getElementsByClassName(this.className)[0];
+    return document.querySelector(`.square .${this.cellClass}`);
   }
 
   isSafe() {
@@ -33,27 +34,31 @@ class Cell {
     return [parseInt(coords[0]), parseInt(coords[1])];
   }
 
-  bah() {
-    let selector = `.${this.className.split(" ").join(".")} .overlay`;
-    // console.log(selector);
-    let overlay = document.querySelector(selector);
+  mouseOver() {
     let color = this.isSafe() ? "green" : "red";
-    overlay.style.cssText = `margin-top: 0px; background-color: ${color}`;
+    let overlay = document.querySelector(`.${this.cellClass} + .overlay`);
+    overlay.style.cssText = `top: 0px; background-color: ${color}`;
   }
 
-  hah() {
-    let selector = `.${this.cellClass} .overlay`
-
-    // console.log(this);
-    let overlay = document.querySelector(selector);
-    // console.lo
-    overlay.style.cssText = "margin-top: 100px";
+  mouseOut() {
+    let overlay = document.querySelector(`.${this.cellClass} + .overlay`);
+    overlay.style.cssText = "top: 50px";
   }
 
-  test() {
-    this.element().addEventListener("mouseenter", () => this.bah());
-    this.element().addEventListener("mouseleave", () => this.hah());
+  addListeners() {
+    this.element().addEventListener("mouseover", () => this.mouseOver());
+    this.element().addEventListener("mouseout", () => this.mouseOut());
   }
+
+  green() {
+    let overlay = document.querySelector(`.${this.cellClass} + .overlay`);
+    overlay.style.cssText = `top: 0px; background-color: green`;
+  }
+
+  hasQueen() {
+    return this.element().innerHTML.includes("Q");
+  }
+
 }
 
 module.exports = Cell;
