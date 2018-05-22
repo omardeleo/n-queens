@@ -21,23 +21,45 @@ body {
 
 .grid {
   border: 4px solid gray;
-  display: inline-block;
+  display: block;
 }
 
 .square {
   width: 50px;
   height: 50px;
-  background-color: white;
   cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
   font-size: 32px;
   background-color: white;
   font-weight: bolder;
+  display: inline-block;
   overflow: hidden;
+  position: relative;
 }
+
+div[class*="cell"] {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+div[class*="cell"] p {
+  z-index: 1;
+  width: 50px;
+  height: 50px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 50px;
+  width: 50px;
+  height: 50px;
+}
+
 
 .row {
   display: flex;
@@ -56,12 +78,4 @@ body {
 .black {
   background-color: black;
   color: white;
-}
-
-.overlay {
-  width: 50px;
-  height: 50px;
-  background-color: green;
-  margin-top:100px;
-  opacity: 0.7;
 }
